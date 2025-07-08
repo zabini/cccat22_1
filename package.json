@@ -1,0 +1,25 @@
+{
+  "name": "trading_platform",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "docker:build": "docker build -t cccat22_backend docker",
+    "docker:run": "docker run -it -v $(pwd)/.:/app cccat22_backend bash",
+    "compose:up": "docker compose -f docker/docker-compose.yaml up -d --build",
+    "compose:down": "docker compose -f docker/docker-compose.yaml -v down",
+    "compose:exec": "docker compose -f docker/docker-compose.yaml exec -it backend bash"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "axios": "^1.10.0",
+    "express": "^5.1.0",
+    "jest": "^30.0.4",
+    "nodemon": "^3.1.10",
+    "pg-promise": "^11.15.0",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
