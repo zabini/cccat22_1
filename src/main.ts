@@ -9,6 +9,16 @@ const connection = pgp()("postgres://postgres:123456@db:5432/app");
 app.post("/signup", async (req: Request, res: Response) => {
     const account = req.body;
     console.log("/signup", account);
+    if (typeof account.name !== "string" || account.name.trim().split(' ').length <= 1){
+        res.status(422);
+        res.json({
+            "type": "http://localhsot:3000/error",
+            "title": "Name must be valid",
+            'status': 422,
+        });
+        return;
+    }
+
     const accountId = crypto.randomUUID();
     await connection.query("insert into ccca.account (account_id, name, email, document, password) values ($1, $2, $3, $4, $5)", [accountId, account.name, account.email, account.document, account.password]);
     res.json({

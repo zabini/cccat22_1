@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
-test("Deve criar uma conta", async () => {
+test("Should create account", async () => {
     // Given
     const input = {
         name: "John Doe",
@@ -19,4 +19,31 @@ test("Deve criar uma conta", async () => {
     expect(outputGetAccount.email).toBe(input.email);
     expect(outputGetAccount.document).toBe(input.document);
     expect(outputGetAccount.password).toBe(input.password);
+});
+
+test.each([
+    null,
+    undefined,
+    '',
+    ' Homer   ',
+    1.2,
+])("Should validate wrong names", async (name: any) => {
+
+    // Given
+    const input = {
+        name: name,
+    }
+
+    // When
+    let response: AxiosResponse | undefined;
+    try {
+        response = await axios.post(`http://localhost:3000/signup`, input);
+    }catch (error: any) {
+        response = error.response;
+    }
+
+    // then
+    expect(response).toBeDefined();
+    expect(response?.status).toBe(422);
+    expect(response?.data.title).toBe('Name must be valid');
 });
