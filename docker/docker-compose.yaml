@@ -3,7 +3,7 @@ services:
     build:
       context: .
     volumes:
-      - ..:/app
+      - ../:/app:cached
     ports:
       - 3000:3000
       - 9229:9229
