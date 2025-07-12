@@ -6,6 +6,7 @@ services:
       - ..:/app
     ports:
       - 3000:3000
+      - 9229:9229
     working_dir: /app
     command: sleep infinity
     stop_grace_period: 2s
