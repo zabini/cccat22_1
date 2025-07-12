@@ -1,29 +1,28 @@
 {
-  "name": "trading_platform",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "docker:build": "docker build -t cccat22_backend docker",
-    "docker:run": "docker run  -it -v $(pwd)/.:/app cccat22_backend bash",
-    "compose:up": "docker compose -f docker/docker-compose.yaml up -d --build",
-    "compose:down": "docker compose -f docker/docker-compose.yaml -v down",
-    "compose:exec": "docker compose -f docker/docker-compose.yaml exec -it backend bash",
-    "compose:start": "docker compose -f docker/docker-compose.yaml exec -it backend npx ts-node src/main.ts",
-    "compose:run": "yarn compose:up && yarn compose:start",
-    "compose:test": "docker compose -f docker/docker-compose.yaml exec -it backend npx jest",
-    "compose:debug": "yarn compose:up && docker compose -f docker/docker-compose.yaml exec -it backend node --inspect=0.0.0.0:9229 -r ts-node/register src/main.ts"
-  },
-  "dependencies": {
-    "@types/express": "^5.0.3",
-    "@types/jest": "^30.0.0",
-    "axios": "^1.10.0",
-    "express": "^5.1.0",
-    "jest": "^30.0.4",
-    "nodemon": "^3.1.10",
-    "pg-promise": "^11.15.0",
-    "ts-jest": "^29.4.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
-  }
+    "name": "trading_platform",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "compose:up": "docker compose -f docker/docker-compose.yaml up -d --build",
+        "compose:down": "docker compose -f docker/docker-compose.yaml -v down",
+        "compose:exec": "docker compose -f docker/docker-compose.yaml exec -it backend bash",
+        "compose:start": "docker compose -f docker/docker-compose.yaml exec -it backend npx ts-node src/main.ts",
+        "compose:run": "yarn compose:up && yarn compose:start",
+        "compose:test": "docker compose -f docker/docker-compose.yaml exec -it backend npx jest",
+        "compose:debug": "yarn compose:up && docker compose -f docker/docker-compose.yaml exec -it backend node --inspect=0.0.0.0:9229 -r ts-node/register src/main.ts",
+        "compose:eval": "docker compose -f docker/docker-compose.yaml exec -it backend npx ts-node"
+    },
+    "dependencies": {
+        "@types/express": "^5.0.3",
+        "@types/jest": "^30.0.0",
+        "axios": "^1.10.0",
+        "express": "^5.1.0",
+        "jest": "^30.0.4",
+        "nodemon": "^3.1.10",
+        "pg-promise": "^11.15.0",
+        "ts-jest": "^29.4.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    }
 }
