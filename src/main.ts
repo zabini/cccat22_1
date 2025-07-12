@@ -6,10 +6,15 @@ app.use(express.json());
 
 const connection = pgp()("postgres://postgres:123456@db:5432/app");
 
+function validName(name: string){
+    if (typeof name !== "string") return false;
+    return name.trim().split(' ').length >= 2;
+}
+
 app.post("/signup", async (req: Request, res: Response) => {
     const account = req.body;
     console.log("/signup", account);
-    if (typeof account.name !== "string" || account.name.trim().split(' ').length <= 1){
+    if (!validName(account.name)){
         res.status(422);
         res.json({
             "type": "http://localhsot:3000/error",
