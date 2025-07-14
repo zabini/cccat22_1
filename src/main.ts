@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import crypto from "crypto";
 import pgp from "pg-promise";
+import {validateCpf} from "./validateCpf";
 const app = express();
 app.use(express.json());
 
@@ -39,10 +40,14 @@ app.post("/signup", async (req: Request, res: Response) => {
         res.json({type: 'http://localhsot:3000/account-guides',title: 'Email must be valid',status: 422,});
         return;
     }
-    let existsEmailVar = await existEmail(account.email);
-    if (existsEmailVar) {
+    if (await existEmail(account.email)) {
         res.status(422);
         res.json({type: 'http://localhsot:3000/account-guides',title: 'Email already in use, choose another',status: 422,});
+        return;
+    }
+    if (!validateCpf(account.document)) {
+        res.status(422);
+        res.json({type: 'http://localhsot:3000/account-guides',title: 'CPF must be a valid one',status: 422,});
         return;
     }
     const accountId = crypto.randomUUID();

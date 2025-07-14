@@ -71,7 +71,7 @@ test.each([
     // When
     let response: AxiosResponse | undefined;
     try {
-        response = await axios.post(`http://localhost:3000/signup`, input);
+        response = await axios.post("http://localhost:3000/signup", input);
     } catch (error: any) {
         response = error.response;
     }
@@ -113,4 +113,27 @@ test("Should validate existing email", async () => {
     expect(wrongResponse).toBeDefined();
     expect(wrongResponse?.status).toBe(422);
     expect(wrongResponse?.data.title).toBe("Email already in use, choose another");
+});
+
+test("Should validate wrong CPF", async () => {
+    // Given
+    const input = {
+        name: "Homer Simpson",
+        email: `email+${crypto.randomUUID()}@email.com`,
+        document: "123456789-01",
+        password: "asdQWE123",
+    };
+
+    // when
+    let response: AxiosResponse | undefined;
+    try {
+        response = await axios.post(`http://localhost:3000/signup`, input);
+    } catch (error: any) {
+        response = error.response;
+    }
+
+    // thens
+    expect(response).toBeDefined();
+    expect(response?.status).toBe(422);
+    expect(response?.data.title).toBe("CPF must be a valid one");
 });
