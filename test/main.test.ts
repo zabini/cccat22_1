@@ -112,7 +112,9 @@ test("Should validate existing email", async () => {
 
     expect(wrongResponse).toBeDefined();
     expect(wrongResponse?.status).toBe(422);
-    expect(wrongResponse?.data.title).toBe("Email already in use, choose another");
+    expect(wrongResponse?.data.title).toBe(
+        "Email already in use, choose another"
+    );
 });
 
 test("Should validate wrong CPF", async () => {
@@ -167,4 +169,45 @@ test.each([
     expect(response).toBeDefined();
     expect(response?.status).toBe(422);
     expect(response?.data.title).toBe("Password must respect guides");
+});
+
+async function addAccount() {
+    const input = {
+        name: "John Doe",
+        email: `john.doe+${crypto.randomUUID()}@gmail.com`,
+        document: "97456321558",
+        password: "asdQWE123",
+    };
+    // When
+    const responseSignup = await axios.post(
+        "http://localhost:3000/signup",
+        input
+    );
+
+    return responseSignup?.data.accountId;
+}
+
+test("Should add founds to account", async () => {
+    const accountId = await addAccount();
+
+    // given
+    const input = {
+        assetId: "BTC",
+        quantity: 10,
+    };
+
+    // when
+    let response: AxiosResponse | undefined;
+    try {
+        response = await axios.post(
+            `http://localhost:3000/deposit/${accountId}`,
+            input
+        );
+    } catch (error: any) {
+        response = error.response;
+    }
+
+    // then
+    expect(response?.status).toBe(201);
+    expect(response?.data).toBe('');
 });
