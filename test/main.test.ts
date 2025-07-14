@@ -137,3 +137,34 @@ test("Should validate wrong CPF", async () => {
     expect(response?.status).toBe(422);
     expect(response?.data.title).toBe("CPF must be a valid one");
 });
+
+test.each([
+    null,
+    undefined,
+    1.2,
+    "123ASad",
+    "12345678",
+    "qwertyui",
+    "QWERTYUI",
+])("Should validate wrong password", async (password: any) => {
+    // Givens
+    const input = {
+        name: "Homer Simpson",
+        email: `email+${crypto.randomUUID()}@email.com`,
+        document: "97456321558",
+        password: password,
+    };
+
+    // when
+    let response: AxiosResponse | undefined;
+    try {
+        response = await axios.post(`http://localhost:3000/signup`, input);
+    } catch (error: any) {
+        response = error.response;
+    }
+
+    // thens
+    expect(response).toBeDefined();
+    expect(response?.status).toBe(422);
+    expect(response?.data.title).toBe("Password must respect guides");
+});

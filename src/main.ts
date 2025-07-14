@@ -27,6 +27,13 @@ async function existEmail(email: string) {
     return result.length > 0;
 }
 
+function validatePassword(password: string){
+    if (typeof password !== 'string') return false;
+    if (password.length < 8) return false;
+    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(password)) return false;
+    return true;
+}
+
 app.post("/signup", async (req: Request, res: Response) => {
     const account = req.body;
     console.log("/signup", account);
@@ -48,6 +55,11 @@ app.post("/signup", async (req: Request, res: Response) => {
     if (!validateCpf(account.document)) {
         res.status(422);
         res.json({type: 'http://localhsot:3000/account-guides',title: 'CPF must be a valid one',status: 422,});
+        return;
+    }
+    if (!validatePassword(account.password)) {
+        res.status(422);
+        res.json({type: 'http://localhsot:3000/account-guides',title: 'Password must respect guides',status: 422,});
         return;
     }
     const accountId = crypto.randomUUID();
