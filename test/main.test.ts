@@ -211,3 +211,28 @@ test("Should add founds to account", async () => {
     expect(response?.status).toBe(201);
     expect(response?.data).toBe('');
 });
+
+test("Should withdraw founds from account", async () => {
+    const accountId = await addAccount();
+
+    // given
+    const input = {
+        assetId: "BTC",
+        quantity: 10,
+    };
+
+    // when
+    let response: AxiosResponse | undefined;
+    try {
+        response = await axios.post(
+            `http://localhost:3000/withdraw/${accountId}`,
+            input
+        );
+    } catch (error: any) {
+        response = error.response;
+    }
+
+    // then
+    expect(response?.status).toBe(201);
+    expect(response?.data).toBe('');
+});

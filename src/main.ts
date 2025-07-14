@@ -85,12 +85,9 @@ app.get("/accounts/:accountId", async (req: Request, res: Response) => {
     res.json(account);
 });
 
-
 app.post("/deposit/:accountId", async (req: Request, res: Response) => {
-
     const accountId = req.params.accountId;
     const deposit = req.body;
-
     await connection.query(
         "insert into ccca.account_asset (account_id, asset_id, quantity) values ($1, $2, $3)",
         [
@@ -100,6 +97,21 @@ app.post("/deposit/:accountId", async (req: Request, res: Response) => {
         ]
     );
 
+    res.status(201);
+    res.send();
+});
+
+app.post("/withdraw/:accountId", async (req: Request, res: Response) => {
+    const accountId = req.params.accountId;
+    const deposit = req.body;
+    await connection.query(
+        "insert into ccca.account_asset (account_id, asset_id, quantity) values ($1, $2, $3)",
+        [
+            accountId,
+            deposit.assetId,
+            deposit.quantity * -1,
+        ]
+    );
     res.status(201);
     res.send();
 });
