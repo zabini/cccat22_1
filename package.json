@@ -7,7 +7,7 @@
         "compose:up": "docker compose -f docker/docker-compose.yaml up -d --build",
         "compose:down": "docker compose -f docker/docker-compose.yaml -v down",
         "compose:exec": "docker compose -f docker/docker-compose.yaml exec -it backend bash",
-        "compose:start": "docker compose -f docker/docker-compose.yaml exec -it backend npx ts-node src/main.ts",
+        "compose:start": "docker compose -f docker/docker-compose.yaml exec -it backend npx nodemon --watch 'src/' --exec 'ts-node src/main.ts' -e ts",
         "compose:run": "yarn compose:up && yarn compose:start",
         "compose:test": "docker compose -f docker/docker-compose.yaml exec -it backend npx jest",
         "compose:debug": "yarn compose:up && docker compose -f docker/docker-compose.yaml exec -it backend node --inspect=0.0.0.0:9229 -r ts-node/register src/main.ts",
