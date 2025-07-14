@@ -21,25 +21,28 @@ function validEmail(email: string) {
     return true;
 }
 
+async function existEmail(email: string) {
+    const result = await connection.query('select 1 from ccca.account where email = $1 limit 1', [email]);
+    return result.length > 0;
+}
+
 app.post("/signup", async (req: Request, res: Response) => {
     const account = req.body;
     console.log("/signup", account);
     if (!validName(account.name)) {
         res.status(422);
-        res.json({
-            type: 'http://localhsot:3000/account-guides',
-            title: 'Name must be valid',
-            status: 422,
-        });
+        res.json({type: 'http://localhsot:3000/account-guides',title: 'Name must be valid',status: 422,});
         return;
     }
     if (!validEmail(account.email)) {
         res.status(422);
-        res.json({
-            type: 'http://localhsot:3000/account-guides',
-            title: 'Email must be valid',
-            status: 422,
-        });
+        res.json({type: 'http://localhsot:3000/account-guides',title: 'Email must be valid',status: 422,});
+        return;
+    }
+    let existsEmailVar = await existEmail(account.email);
+    if (existsEmailVar) {
+        res.status(422);
+        res.json({type: 'http://localhsot:3000/account-guides',title: 'Email already in use, choose another',status: 422,});
         return;
     }
     const accountId = crypto.randomUUID();
@@ -61,7 +64,7 @@ app.post("/signup", async (req: Request, res: Response) => {
 app.get("/accounts/:accountId", async (req: Request, res: Response) => {
     const accountId = req.params.accountId;
     console.log(`/accounts/${accountId}`);
-    const [account] = await connection.query("select * from ccca.account", []);
+    const [account] = await connection.query("select * from ccca.account where account_id = $1", [accountId]);
     res.json(account);
 });
 
